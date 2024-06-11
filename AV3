@@ -1,0 +1,36 @@
+def soma_zero_combinada(numeros):
+    # Separando números em positivos e negativos
+    positivos = [num for num in numeros if num > 0]
+    negativos = [num for num in numeros if num < 0]
+    subconjuntos = []
+    
+    # Função recursiva para encontrar combinações de números negativos que somam a um número positivo
+    def encontrar_combinacoes(negativos, tamanho):
+        if tamanho == 0:
+            return [[]]
+        if not negativos:
+            return []
+        
+        resultado = []
+        for i in range(len(negativos)):
+            for comb in encontrar_combinacoes(negativos[i+1:], tamanho-1):
+                resultado.append([negativos[i]] + comb)
+        return resultado
+
+    # Verificando todas as combinações possíveis de números negativos
+    for tamanho in range(2, len(negativos)+1):  # Começando de 2 elementos até o tamanho máximo da lista de negativos
+        combinacoes = encontrar_combinacoes(negativos, tamanho)
+        for comb in combinacoes:
+            soma_negativos = sum(comb)
+            if -soma_negativos in positivos:
+                subconjuntos.append(comb + [-soma_negativos])
+    
+    if subconjuntos:
+        for subconjunto in subconjuntos:
+            print("Subconjunto encontrado:", subconjunto)
+    else:
+        print("Nenhum subconjunto encontrado.")
+
+# Testando com a entrada específica
+numeros = [-1, -3, -3, -4, 5, 10]
+soma_zero_combinada(numeros)
